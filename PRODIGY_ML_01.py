@@ -6,6 +6,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.linear_model import LinearRegression
 
 
+#TRAIN DATASET
+
 
 td=pd.read_csv(r'D:\Testing\new\train.csv')
 print(td.columns)
@@ -13,8 +15,10 @@ num_td=td.select_dtypes(include="number")
 corr_matrix=num_td.corr()
 corr_matrix["SalePrice"].sort_values(ascending = False)
 
+#TAKING ONLY REQUIRED COLUMNS
 req_traindata = ["GarageArea","OverallQual","TotalBsmtSF","1stFlrSF","2ndFlrSF","LowQualFinSF","GrLivArea","BsmtFullBath","BsmtHalfBath","FullBath","HalfBath","TotRmsAbvGrd","SalePrice"]
 
+#SELECTED ONLY REQUIRED COLUMNS 
 selected_data=td[req_traindata]
 selected_data.loc[:,'Totalbath']=(selected_data['BsmtFullBath'].fillna(0)+
                                  selected_data['BsmtHalfBath'].fillna(0)+
@@ -34,6 +38,9 @@ train_set,test_set=train_test_split(new_td,test_size=0.2,random_state=42)
 print(train_set.shape, test_set.shape)
 housing=train_set.drop('SalePrice',axis=1)
 house_labels= train_set['SalePrice'].copy()
+
+
+#CREATING THE PIPELINE FOR DATA POINTS WHICH RANGES ARE DISTURBUTED WIDELY 
 
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -85,6 +92,8 @@ test_df = test_df_unproc.fillna(test_df_unproc.mean())
 X_test = my_pipeline.transform(test_df[['TotRmsAbvGrd','TotalBath','GarageArea','TotalSF','OverallQual']].values)
 print(X_test)
 
+
+#SELECTING THE MODEL 
 model = LinearRegression()
 
 model.fit(X_train,Y_train)
